@@ -30,6 +30,11 @@ public class SensorsService {
 		//return foundSensor.orElseThrow(SensorNotFoundException::new);
 	}
 	
+	public Sensor findByName(String name) {
+		Optional<Sensor> foundSensor = sensorsRepository.findByName(name);
+		return foundSensor.orElse(null);
+	}
+	
 	@Transactional
 	public void save(Sensor sensor) {
 		enrichSensor(sensor);
