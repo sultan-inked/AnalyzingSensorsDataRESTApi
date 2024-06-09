@@ -31,6 +31,8 @@ public class Sensor {
 	@Column(name = "updated_at")
 	private LocalDateTime updatedAt;
 	
+	public Sensor() {}
+	
 	public Sensor(int id, String name) {
 		this.id = id;
 		this.name = name;
