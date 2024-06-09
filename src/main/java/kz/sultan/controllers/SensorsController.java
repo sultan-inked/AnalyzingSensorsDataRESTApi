@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import jakarta.validation.Valid;
 import kz.sultan.dto.SensorDTO;
 import kz.sultan.model.Sensor;
 import kz.sultan.services.SensorsService;
+import kz.sultan.util.SensorErrorResponse;
 import kz.sultan.util.SensorNotCreatedException;
 import kz.sultan.util.SensorValidator;
 
@@ -62,4 +64,13 @@ public class SensorsController {
 		return modelMapper.map(sensorDTO, Sensor.class);
 	}
 	
+	@ExceptionHandler
+	private ResponseEntity<SensorErrorResponse> handleException(SensorNotCreatedException exc) {
+		SensorErrorResponse response = new SensorErrorResponse(
+				exc.getMessage(),
+				System.currentTimeMillis()
+		);
+		
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+	}
 }
