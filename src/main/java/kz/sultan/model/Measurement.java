@@ -1,5 +1,7 @@
 package kz.sultan.model;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,9 +21,16 @@ public class Measurement {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
+	@Column(name = "temperature_value")
 	@Min(value = -100, message = "Value should be between -100 and 100")
 	@Max(value = 100, message = "Value should be between -100 and 100")
 	private double value;
+	
+	@Column(name = "raining")
+	private boolean raining;
+	
+	@Column(name = "created_at")
+	private LocalDateTime createdAt;
 	
 	@ManyToOne
 	@JoinColumn(name = "sensor_name", referencedColumnName = "name")
@@ -57,6 +66,22 @@ public class Measurement {
 
 	public void setSensor(Sensor sensor) {
 		this.sensor = sensor;
+	}
+
+	public boolean isRaining() {
+		return raining;
+	}
+
+	public void setRaining(boolean raining) {
+		this.raining = raining;
+	}
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
 	}
 	
 	
