@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kz.sultan.model.Sensor;
 import kz.sultan.repositories.SensorsRepository;
+import kz.sultan.util.SensorNotFoundException;
 
 @Service
 @Transactional(readOnly = true)
@@ -26,7 +27,8 @@ public class SensorsService {
 	
 	public Sensor findOne(int id) {
 		Optional<Sensor> foundSensor = sensorsRepository.findById(id);
-		return foundSensor.orElse(null);
+		//return foundSensor.orElse(null);
+		return foundSensor.orElseThrow(SensorNotFoundException::new);
 	}
 	
 	@Transactional
