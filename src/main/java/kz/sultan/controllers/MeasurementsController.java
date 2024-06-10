@@ -1,43 +1,63 @@
 package kz.sultan.controllers;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import kz.sultan.dto.MeasurementDTO;
 import kz.sultan.model.Measurement;
-import kz.sultan.services.MeasurementService;
+import kz.sultan.services.MeasurementsService;
 import kz.sultan.util.MeasurementErrorResponse;
 import kz.sultan.util.MeasurementNotCreatedException;
 import kz.sultan.util.MeasurementValidator;
 
-@Controller
+@RestController
 @RequestMapping("/measurements")
-public class MeasurementController {
+public class MeasurementsController {
 	
-	private final MeasurementService measurementService;
+	private final MeasurementsService measurementsService;
 	private final ModelMapper modelMapper;
 	private final MeasurementValidator measurementValidator;
 	
 	@Autowired
-	public MeasurementController(MeasurementService measurementService, ModelMapper modelMapper, MeasurementValidator measurementValidator) {
-		this.measurementService = measurementService;
+	public MeasurementsController(MeasurementsService measurementsService, ModelMapper modelMapper, MeasurementValidator measurementValidator) {
+		this.measurementsService = measurementsService;
 		this.modelMapper = modelMapper;
 		this.measurementValidator = measurementValidator;
 	}
 	
 	
+	
+	//@GetMapping
+	//public ResponseEntity<List<MeasurementDTO>> getMeasurements() {
+	//	System.out.println("**************88");
+	//	List<MeasurementDTO> measurementDTOs = measurementsService.findAll().stream().map(this::convertToMeasurementDTO)
+	//			.collect(Collectors.toList());
+	//	return ResponseEntity.ok(measurementDTOs);
+	//}
+	@GetMapping
+	public List<MeasurementDTO> getMeasurements() {
+		System.out.println("**************88");
+		return measurementsService.findAll().stream().map(this::convertToMeasurementDTO)
+				.collect(Collectors.toList());
+	}
+	private MeasurementDTO convertToMeasurementDTO(Measurement measurement) {
+		System.out.println("**************88");
+		return modelMapper.map(measurement, MeasurementDTO.class);
+	}
 	
 	@PostMapping("/add")
 	public ResponseEntity<HttpStatus> add(@RequestBody @Valid MeasurementDTO measurementDTO,
@@ -60,6 +80,8 @@ public class MeasurementController {
 			throw new MeasurementNotCreatedException(errorMessage.toString());
 		}
 		System.out.println(measurement.getSensor());
+		
+		measurementsService.save(measurement);
 		
 		return ResponseEntity.ok(HttpStatus.OK);
 	}

@@ -1,23 +1,30 @@
 package kz.sultan.services;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kz.sultan.model.Measurement;
-import kz.sultan.repositories.MeasurementRepository;
+import kz.sultan.repositories.MeasurementsRepository;
 
 @Service
 @Transactional(readOnly = true)
-public class MeasurementService {
+public class MeasurementsService {
 	
-	private final MeasurementRepository measurementRepository;
+	private final MeasurementsRepository measurementRepository;
 	
 	@Autowired
-	public MeasurementService(MeasurementRepository measurementRepository) {
+	public MeasurementsService(MeasurementsRepository measurementRepository) {
 		this.measurementRepository = measurementRepository;
+	}
+	
+	
+	
+	public List<Measurement> findAll() {
+		return measurementRepository.findAll();
 	}
 	
 	@Transactional
