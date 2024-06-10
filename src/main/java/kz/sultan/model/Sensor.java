@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,7 +34,7 @@ public class Sensor {
 	@Column(name = "updated_at")
 	private LocalDateTime updatedAt;
 	
-	@OneToMany(mappedBy = "sensor")
+	@OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL)
 	private List<Measurement> measurements;
 	
 	public Sensor() {}
@@ -73,5 +74,11 @@ public class Sensor {
 
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	@Override
+	public String toString() {
+		return "Sensor [id=" + id + ", name=" + name + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt
+				+ ", measurements=" + measurements + "]";
 	}
 }

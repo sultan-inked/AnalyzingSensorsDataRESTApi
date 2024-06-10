@@ -2,6 +2,9 @@ package kz.sultan.model;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,7 +35,7 @@ public class Measurement {
 	@Column(name = "created_at")
 	private LocalDateTime createdAt;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "sensor_name", referencedColumnName = "name")
 	private Sensor sensor;
 	

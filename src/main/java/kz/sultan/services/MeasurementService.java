@@ -23,6 +23,7 @@ public class MeasurementService {
 	@Transactional
 	public void save(Measurement measurement) {
 		enrichMeasurement(measurement);
+		
 		measurementRepository.save(measurement);
 	}
 	private void enrichMeasurement(Measurement measurement) {
