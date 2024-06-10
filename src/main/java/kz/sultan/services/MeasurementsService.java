@@ -27,6 +27,10 @@ public class MeasurementsService {
 		return measurementRepository.findAll();
 	}
 	
+	public List<Measurement> findByRaining(boolean raining) {
+		return measurementRepository.findByRaining(raining);
+	}
+	
 	@Transactional
 	public void save(Measurement measurement) {
 		enrichMeasurement(measurement);

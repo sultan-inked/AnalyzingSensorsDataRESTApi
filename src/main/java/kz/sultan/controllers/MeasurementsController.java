@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import kz.sultan.dto.MeasurementDTO;
+import kz.sultan.dto.RainyDaysCountDTO;
 import kz.sultan.model.Measurement;
 import kz.sultan.services.MeasurementsService;
 import kz.sultan.util.MeasurementErrorResponse;
@@ -40,7 +41,7 @@ public class MeasurementsController {
 	}
 	
 	
-	
+	// Если не указывать @RestController, то придется писать такой метод, который возвращает ResponseEntity
 	//@GetMapping
 	//public ResponseEntity<List<MeasurementDTO>> getMeasurements() {
 	//	System.out.println("**************88");
@@ -50,13 +51,18 @@ public class MeasurementsController {
 	//}
 	@GetMapping
 	public List<MeasurementDTO> getMeasurements() {
-		System.out.println("**************88");
 		return measurementsService.findAll().stream().map(this::convertToMeasurementDTO)
 				.collect(Collectors.toList());
 	}
 	private MeasurementDTO convertToMeasurementDTO(Measurement measurement) {
-		System.out.println("**************88");
 		return modelMapper.map(measurement, MeasurementDTO.class);
+	}
+	
+	@GetMapping("/rainyDaysCount")
+	public RainyDaysCountDTO getRainyDaysCount() {
+		List<Measurement> measurements = measurementsService.findByRaining(true);
+		RainyDaysCountDTO rainyDays = new RainyDaysCountDTO(measurements.size());
+		return rainyDays;
 	}
 	
 	@PostMapping("/add")
