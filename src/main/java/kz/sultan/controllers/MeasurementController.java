@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import jakarta.validation.Valid;
 import kz.sultan.dto.MeasurementDTO;
 import kz.sultan.model.Measurement;
 import kz.sultan.services.MeasurementService;
+import kz.sultan.util.MeasurementErrorResponse;
 import kz.sultan.util.MeasurementNotCreatedException;
 import kz.sultan.util.MeasurementValidator;
 
@@ -65,4 +67,13 @@ public class MeasurementController {
 		return modelMapper.map(measurementDTO, Measurement.class);
 	}
 	
+	@ExceptionHandler
+	private ResponseEntity<MeasurementErrorResponse> handleException(MeasurementNotCreatedException exc) {
+		MeasurementErrorResponse response = new MeasurementErrorResponse(
+				exc.getMessage(),
+				System.currentTimeMillis()
+		);
+		
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+	}
 }
